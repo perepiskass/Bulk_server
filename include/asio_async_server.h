@@ -27,6 +27,7 @@ class server
 {
 public:
     server(boost::asio::io_service& io_service, size_t port, DataIn* bulk);
+    ~server();
 private:
   void do_accept(DataIn* bulk);
 

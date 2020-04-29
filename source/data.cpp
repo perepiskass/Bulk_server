@@ -120,10 +120,14 @@
     }
 
     void DataToFile::update(Bulk bulk)
-    {
+    {   
+        auto start(std::chrono::steady_clock::now());
         std::ofstream out;
         auto timeUNIX = bulk.second.count();
-        std::string path = "bulk"+ std::to_string(timeUNIX) + ".log";
+        auto end(std::chrono::steady_clock::now());
+        using nanoseconds = std::chrono::duration<double,std::ratio<1,1'000'000'000>>;
+        auto diff = nanoseconds(end - start).count();
+        std::string path = "bulk"+ std::to_string(timeUNIX) + '.' + std::to_string(int(diff)) + ".log";
         out.open(path);
         if (out.is_open(),std::ios::app)
         {

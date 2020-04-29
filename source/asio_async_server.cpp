@@ -17,7 +17,7 @@ void session::do_read()
   socket_.async_read_some(boost::asio::buffer(data_, max_length),
       [this, self](boost::system::error_code ec, std::size_t length)
       {
-        if (!ec)
+        if ( ec!=boost::asio::error::eof )
         {
           const char* delim = "\n";
           char* copy =(char*) std::malloc(length);
@@ -31,6 +31,7 @@ void session::do_read()
 
           do_read();
         }
+        // std::cout<< "socket closed\n";
       });
 }
 
@@ -41,6 +42,11 @@ server::server(boost::asio::io_service& io_service, size_t port, DataIn* bulk)
     socket_(io_service),bulk_(bulk)
 {
   do_accept(bulk);
+}
+
+server::~server()
+{
+  acceptor_.close();
 }
 
 void server::do_accept(DataIn* bulk)

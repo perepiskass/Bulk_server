@@ -1,20 +1,23 @@
 #include "version_lib.h"
+#include "asio_client.h"
 #include <iostream>
+#include <string>
 
+std::pair<std::string,size_t> checkArg(int argc,char** argv);
 
 int main(int argc, char *argv[]) 
 {
-  const std::string ver = "-version";
-  if ( argc > 1)
-  {
-    if (argv[1] == ver)     std::cout << "version: " << version_major()<< '.'<< version_minor() << '.' << version_patch() << std::endl;
-    else                    std::cout << "Type: -version, if you want to known proramm version" << std::endl;    
-  }
-  
-    
+  auto args = checkArg(argc,argv);
   try
   {
-    std::cout << "It is a client" << std::endl;
+      client cli{};
+      cli.connect(args.first,args.second);
+
+      std::string str;
+      while(getline(std::cin,str))
+      {
+        cli.write(str.c_str());
+      }
   }
   
   catch(const std::exception& e)

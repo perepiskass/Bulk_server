@@ -29,8 +29,9 @@ configure_file(${CMAKE_SOURCE_DIR}/include/version.h.in ${CMAKE_SOURCE_DIR}/incl
 
 # СОЗДАЕМ ИСПОЛНЯЕМЫЕ ФАЙЛЫ И ДОБОВЛЯЕМ БИБЛИОТЕКИ В ПРОЕКТ-----------------
 # Создаем исполняемый фаил print_ip из main.cpp
-add_executable(${CMAKE_PROJECT_NAME} ${CMAKE_SOURCE_DIR}/source/server.cpp ${CMAKE_SOURCE_DIR}/source/arg.cpp 
+add_executable(bulk_server ${CMAKE_SOURCE_DIR}/source/server.cpp ${CMAKE_SOURCE_DIR}/source/arg.cpp 
 ${CMAKE_SOURCE_DIR}/source/data.cpp ${CMAKE_SOURCE_DIR}/source/asio_async_server.cpp)
+add_executable(bulk_client ${CMAKE_SOURCE_DIR}/source/client.cpp ${CMAKE_SOURCE_DIR}/source/arg_client.cpp)
 # Создаем библиотеку с именем versionlib из источника - файла с именем version_lib.cpp
 add_library(versionlib ${CMAKE_SOURCE_DIR}/source/version_lib.cpp)
 # Создаем исполняемый фаил google_test из test.cpp (для Boost test)
@@ -44,13 +45,16 @@ add_executable(gtest  ${CMAKE_SOURCE_DIR}/source/gtest.cpp  ${CMAKE_SOURCE_DIR}/
 
 # УСТАНАВЛИВАЕМ СВОЙСТВА ДЛЯ КОМПИЛЯЦИИ ИСПОЛНЯЕМЫМ ФАЙЛАМ И БИБЛИОТЕКАМ----
 
-set_target_properties(${CMAKE_PROJECT_NAME} versionlib gtest PROPERTIES
+set_target_properties(bulk_server bulk_client versionlib gtest PROPERTIES
 # Стандарт С++ версии 17
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
-target_include_directories(${CMAKE_PROJECT_NAME}
+target_include_directories(bulk_server
+    PRIVATE "${CMAKE_SOURCE_DIR}/include"
+)
+target_include_directories(bulk_client
     PRIVATE "${CMAKE_SOURCE_DIR}/include"
 )
 target_include_directories(versionlib
@@ -61,7 +65,13 @@ target_include_directories(gtest
 )
 
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+target_link_libraries(bulk_server PRIVATE
+    versionlib
+    ${Boost_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
+    Threads::Threads
+)
+target_link_libraries(bulk_client PRIVATE
     versionlib
     ${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
@@ -80,8 +90,11 @@ versionlib
 
 # СВОЙСТВА ДЛЯ КОМПИЛЯТОРОВ (ЛЮБЫЕ ПРЕДУПРЕЖДЕНИЯ ТРАКТОВАТЬ КАК ОШИБКИ)
 if (MSVC)
-    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
+    target_compile_options(bulk_server PRIVATE
         /W4
+    )
+    target_compile_options(bulk_client PRIVATE
+    /W4
     )
     target_compile_options(versionlib PRIVATE
         /W4
@@ -90,7 +103,10 @@ if (MSVC)
         /W4
     )
 else ()
-    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
+    target_compile_options(bulk_server PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+    target_compile_options(bulk_client PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(versionlib PRIVATE
@@ -103,7 +119,7 @@ endif()
 
 # ----------------------------------------------------------------------
 
-install(TARGETS ${CMAKE_PROJECT_NAME} RUNTIME DESTINATION bin)
+install(TARGETS bulk_server RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
@@ -117,7 +133,7 @@ include(CPack)
 
 enable_testing()
 
-add_test(version_test_case ${CMAKE_PROJECT_NAME})
+add_test(version_test_case bulk_server)
 
 
 
