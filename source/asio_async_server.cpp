@@ -1,9 +1,12 @@
 #include "asio_async_server.h"
 
+size_t session::count = 0;
 
 //-----session-----------------------------------------------------------
 session::session(tcp::socket socket,DataIn* bulk): socket_(std::move(socket)), bulk_(bulk)
-  {}
+  {
+    session::count++;
+  }
 
 void session::start()
 {
@@ -19,21 +22,31 @@ void session::do_read()
       {
         if ( ec!=boost::asio::error::eof )
         {
-          const char* delim = "\n";
           char* copy =(char*) std::malloc(length);
           std::strcpy(copy,data_);
-          auto ptr = std::strtok(copy,delim);
-          while (ptr)
-          {
-              bulk_->setData(ptr);
-              ptr = strtok(0,delim);
-          }
-
+          // if(std::string(copy) == "{") std::cout << "It is { " << std::endl;
+          // std::cout << length << " - length serve" << std::endl;
+          bulk_->setData(std::move(copy));
+          memset(data_,0,sizeof(data_));
           do_read();
         }
-        // std::cout<< "socket closed\n";
+        else 
+        {
+          std::cout<< "socket closed\n";
+          session::count--;
+          if(session::count == 0) bulk_->stop();
+        }
       });
 }
+
+
+      // size_t up_to_enter(const boost::system::error_code &, std::size_t length) 
+      // {
+      //   for ( size_t i = 0; i < length; ++i)
+      //     if ( data_[i] == '\n')
+      //       return 0;
+      //   return 1;
+      // }
 
 
 //-----server-----------------------------------------------------------
@@ -46,6 +59,7 @@ server::server(boost::asio::io_service& io_service, size_t port, DataIn* bulk)
 
 server::~server()
 {
+  bulk_->~DataIn();
   acceptor_.close();
 }
 

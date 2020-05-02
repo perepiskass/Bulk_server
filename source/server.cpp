@@ -1,6 +1,5 @@
 #include "version_lib.h"
 #include "asio_async_server.h"
-#include <csignal>
 #include <iostream>
 
 std::pair<size_t,size_t> checkArg(int argc,char** argv);
@@ -27,7 +26,6 @@ int main(int argc, char *argv[])
     
   try
   {
-    // signal(SIGINT,signalFunction);
 
     DataIn bulk(args.second);
     DataToConsole console(&bulk);

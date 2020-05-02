@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/asio.hpp>
 #include <iostream>
+#include <string>
 
 namespace ba = boost::asio;
 
@@ -10,7 +11,7 @@ class client
         client();
         void connect(std::string& addres, size_t port);
         void disconnect();
-        void write(const char* str);
+        void write(std::string&& str);
     private:
         ba::io_service io_context;
         ba::ip::tcp::endpoint ep;

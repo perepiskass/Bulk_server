@@ -5,7 +5,10 @@
 //-----Data input methods----------------------------------------------------------------------
     DataIn::DataIn(int count):count(count),countTry(count)
     {}
-
+    DataIn::~DataIn()
+    {
+        stop();
+    }
     void DataIn::subscribe(Observer *obs)
     {
         subs.push_back(obs);
@@ -13,8 +16,10 @@
 
     void DataIn::checkDilimiter(const std::string& str)
     {
+        std::cout << str << " checkDilimiter" << std::endl;
         if (str == "{")
         {
+            // std::cout<< "check delimetr" << std::endl;
             if(checkD.first) ++checkD.second;
             else
             {
@@ -36,41 +41,65 @@
 
     void DataIn::setData(std::string&& str) 
     {
-        checkDilimiter(str);
-        if(checkD.first)
+        std::cout << str << " setData" << std::endl;
+        const std::string delim = "\\n\n";
+        std::string::size_type start = 0;
+        std::string::size_type end = 0;
+        if(end >= str.size()) end = str.size() - 1;
+        while(start != std::string::npos && end != str.size() -1)   // \ntttt\nyyyy\nrrrrrr
         {
-            if (str!="{" && str!="}")
-            {
-                if(bulk.first.size() == 0) 
-                {
-                    bulk.second = std::chrono::seconds(std::time(NULL));
-                }
-                bulk.first.emplace_back(std::forward<std::string>(str));
-            }
-            else if (!checkD.second)
-            {
-                notify();
-                clearData();
-            }
+            start = str.find_first_not_of(delim,start);
+            end = str.find_first_of(delim,start);
+            setCommand(std::forward<std::string>(str.substr(start,end-start)));
+            start = end;
         }
-        else
+    }
+
+void DataIn::setCommand(std::string&& str)
+{
+    std::cout << str << " setCommand" << std::endl;
+    checkDilimiter(str);
+    if(checkD.first)
+    {
+        if (str!="{" && str!="}")
         {
-            if (str!="{" && str!="}" && countTry)
+            if(bulk.first.size() == 0) 
             {
-                if(bulk.first.size() == 0)
-                {
-                    bulk.second = std::chrono::seconds(std::time(NULL));
-                }
-                bulk.first.emplace_back(std::forward<std::string>(str));
-                --countTry;
+                bulk.second = std::chrono::seconds(std::time(NULL));
             }
-            if(!countTry)
-            {
-                notify();
-                clearData();
-            }
+            bulk.first.emplace_back(std::forward<std::string>(str));
         }
-        
+        else if (!checkD.second)
+        {
+            notify();
+            clearData();
+        }
+    }
+    else
+    {
+        if (str!="{" && str!="}" && countTry)
+        {
+            if(bulk.first.size() == 0)
+            {
+                bulk.second = std::chrono::seconds(std::time(NULL));
+            }
+            bulk.first.emplace_back(std::forward<std::string>(str));
+            --countTry;
+        }
+        if(!countTry)
+        {
+            notify();
+            clearData();
+        }
+    }
+}
+    void DataIn::stop()
+    {
+        if(!bulk.first.empty())
+        {
+            notify();
+            clearData();
+        }
     }
 
     void DataIn::notify() 

@@ -15,10 +15,9 @@ void client::disconnect()
     socket_.close();
 }
 
-void client::write(const char* str)
+void client::write(std::string&& str)
 {
-    auto lenght = strlen(str);
-    ba::write(socket_, ba::buffer(str, lenght));
+    ba::write(socket_, ba::buffer(std::forward<std::string>(str), str.size()) );
 }
 
 

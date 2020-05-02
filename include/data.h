@@ -26,10 +26,13 @@ class DataIn : public Publisher {
 public:
     void subscribe(Observer *obs) override;
     void setData(std::string&& str);
+    void stop();
     void notify();
     int getQuantity();
     DataIn(int count);
+    ~DataIn();
 private:
+    void setCommand(std::string&& str);
     void checkDilimiter(const std::string& str);
     void clearData();
 

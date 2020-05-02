@@ -5,6 +5,7 @@
 #include <utility>
 #include <boost/asio.hpp>
 #include "data.h"
+#include <string>
 
 using boost::asio::ip::tcp;
 
@@ -21,6 +22,7 @@ private:
   enum { max_length = 1024 };
   char data_[max_length];
   DataIn* bulk_;
+  static size_t count;
 };
 
 class server

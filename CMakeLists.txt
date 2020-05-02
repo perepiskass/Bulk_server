@@ -31,7 +31,8 @@ configure_file(${CMAKE_SOURCE_DIR}/include/version.h.in ${CMAKE_SOURCE_DIR}/incl
 # Создаем исполняемый фаил print_ip из main.cpp
 add_executable(bulk_server ${CMAKE_SOURCE_DIR}/source/server.cpp ${CMAKE_SOURCE_DIR}/source/arg.cpp 
 ${CMAKE_SOURCE_DIR}/source/data.cpp ${CMAKE_SOURCE_DIR}/source/asio_async_server.cpp)
-add_executable(bulk_client ${CMAKE_SOURCE_DIR}/source/client.cpp ${CMAKE_SOURCE_DIR}/source/arg_client.cpp)
+add_executable(bulk_client ${CMAKE_SOURCE_DIR}/source/client.cpp ${CMAKE_SOURCE_DIR}/source/arg_client.cpp
+${CMAKE_SOURCE_DIR}/source/asio_client.cpp)
 # Создаем библиотеку с именем versionlib из источника - файла с именем version_lib.cpp
 add_library(versionlib ${CMAKE_SOURCE_DIR}/source/version_lib.cpp)
 # Создаем исполняемый фаил google_test из test.cpp (для Boost test)

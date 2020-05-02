@@ -5,6 +5,7 @@
 
 std::pair<std::string,size_t> checkArg(int argc,char** argv);
 
+
 int main(int argc, char *argv[]) 
 {
   auto args = checkArg(argc,argv);
@@ -16,7 +17,7 @@ int main(int argc, char *argv[])
       std::string str;
       while(getline(std::cin,str))
       {
-        cli.write(str.c_str());
+        cli.write(std::move(str));
       }
   }
   
