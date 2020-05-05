@@ -27,16 +27,13 @@ int main(int argc, char *argv[])
   try
   {
 
-    DataIn bulk(args.second);
-    DataToConsole console(&bulk);
-    DataToFile file(&bulk);
 
     boost::asio::io_service io_service;
 
     boost::asio::signal_set sig(io_service, SIGINT, SIGTERM);
     sig.async_wait(signalFunction);
 
-    serverPtr = new server(io_service, args.first, &bulk);
+    serverPtr = new server(io_service, args);
     io_service.run();
 
     std::cout << "It is a server" << std::endl;

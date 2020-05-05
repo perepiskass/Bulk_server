@@ -1,58 +1,86 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include <string>
-#include <ctime>
-#include <chrono>
 #include <fstream>
+#include <csignal>
+#include <algorithm>
+#include <queue>
+#include <typeinfo>
+#include <cstring>
+#include <sstream>
+#include <atomic>
 
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
-using Time = std::chrono::seconds;
-using Bulk = std::pair<std::vector<std::string>,Time>;
+#include "pcout.h"
 
-// Observer or Sibscriber
 class Observer {
 public:
-    virtual void update(Bulk bulk) = 0;
+    virtual void setBulk(const Bulk&) = 0;
+    virtual void update(int id) = 0;
+    virtual ~Observer() = default;
 };
+
 using Subscrabers = std::vector<Observer*>;
 
-// Publisher or Observable
-class Publisher {
-public:
-    virtual void subscribe(Observer* obs) = 0;
-};
 
-class DataIn : public Publisher {
+class DataIn
+{
 public:
-    void subscribe(Observer *obs) override;
-    void setData(std::string&& str);
-    void stop();
-    void notify();
-    int getQuantity();
-    DataIn(int count);
+    DataIn(int size);
     ~DataIn();
+    void setBulk(std::size_t bulk);
+    void subscribe(Observer *obs);
+    void setData(std::string&& str);
+    void write();
+    void notify();
+
+    std::vector<std::thread*> vec_thread;
+    std::queue<Bulk> bulkQ;
+    std::condition_variable cv;
+    std::mutex mtx_input;
+    std::mutex mtx_cmd;
+    std::mutex mtx_file;
+    std::atomic<bool> works;
+
 private:
-    void setCommand(std::string&& str);
-    void checkDilimiter(const std::string& str);
     void clearData();
+    void checkDilimiter(std::string& str);
+    void setQueues();
 
-    std::pair<bool,uint8_t> checkD; ///< переменная для проверки использования знаков динамического разделения блоков "{" и "}" и хранения состояния о их кол-ве
-    //decltype(std::chrono::seconds(std::time(NULL))) 
-    Bulk bulk;
     Subscrabers subs;
-    const int count;        ///< хранит информацию о размере блока, задаеться при запуске программы (инициализируеться в конструкторе)
-    int countTry;           ///< оставшееся ко-во команд для ввода в блок для его формирования
+    std::pair<bool,uint8_t> checkD; ///< переменная для проверки использования знаков динамического разделения блоков "{" и "}" и хранения состояния о их кол-ве
+    Bulk bulk;
+    std::size_t count;        ///< хранит информацию о размере блока, задаеться при запуске программы (инициализируеться в конструкторе)
+    std::size_t countTry;           ///< оставшееся ко-во команд для ввода в блок для его формирования
 };
 
-class DataToConsole : public Observer {
-public:
-    DataToConsole(DataIn *data);
-    void update( Bulk bulk) override ;
+class DataToConsole:public Observer
+{
+    private:
+    DataIn* _data;
+    std::queue<Bulk> bulkQ;
+    public:
+        void setBulk(const Bulk& bulk) override;
+        DataToConsole(DataIn* data);
+        ~DataToConsole()override;
+        void update(int id);
 };
 
-class DataToFile : public Observer {
-public:
-    DataToFile(DataIn *data);
-    void update(Bulk bulk) override;
+class DataToFile:public Observer
+{
+    private:
+    DataIn* _data;
+    std::queue<Bulk> bulkQ;
+
+    public:
+        void setBulk(const Bulk& bulk) override;
+        DataToFile(DataIn* data);
+        ~DataToFile()override;
+        void update(int id);
+
 };
 

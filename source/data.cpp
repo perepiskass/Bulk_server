@@ -1,25 +1,38 @@
 #include "data.h"
 
 
-
 //-----Data input methods----------------------------------------------------------------------
     DataIn::DataIn(int count):count(count),countTry(count)
-    {}
+    {
+        works = true;
+    }
+
     DataIn::~DataIn()
     {
-        stop();
+        Writer{} << "DataIn - destructor-start" << std::endl;
+        for(auto&i : vec_thread)
+        {
+            delete i;
+        }
+        Writer{} << "DataIn - destructor-middle" << std::endl;
+        for(auto& i : subs)
+        {
+            delete i;
+        }
+        Writer{} << "DataIn - destructor-end" << std::endl;
     }
+
     void DataIn::subscribe(Observer *obs)
     {
         subs.push_back(obs);
     }
 
-    void DataIn::checkDilimiter(const std::string& str)
+    void DataIn::checkDilimiter(std::string& str)
     {
-        std::cout << str << " checkDilimiter" << std::endl;
+
         if (str == "{")
         {
-            // std::cout<< "check delimetr" << std::endl;
+            // Writer{} << "It is { " << std::endl;
             if(checkD.first) ++checkD.second;
             else
             {
@@ -41,131 +54,149 @@
 
     void DataIn::setData(std::string&& str) 
     {
-        std::cout << str << " setData" << std::endl;
-        const std::string delim = "\\n\n";
-        std::string::size_type start = 0;
-        std::string::size_type end = 0;
-        if(end >= str.size()) end = str.size() - 1;
-        while(start != std::string::npos && end != str.size() -1)   // \ntttt\nyyyy\nrrrrrr
-        {
-            start = str.find_first_not_of(delim,start);
-            end = str.find_first_of(delim,start);
-            setCommand(std::forward<std::string>(str.substr(start,end-start)));
-            start = end;
-        }
-    }
+        // std::scoped_lock sl{mtx_cmd,mtx_file};
+        // Writer{} << "From setData - " << str << std::endl;
+        Logger::getInstance().set_lineCount(0);
 
-void DataIn::setCommand(std::string&& str)
-{
-    std::cout << str << " setCommand" << std::endl;
-    checkDilimiter(str);
-    if(checkD.first)
-    {
-        if (str!="{" && str!="}")
+        checkDilimiter(str);
+        if(checkD.first)
         {
-            if(bulk.first.size() == 0) 
+            if (str!="{" && str!="}")
             {
-                bulk.second = std::chrono::seconds(std::time(NULL));
+                if(bulk.first.size() == 0) 
+                {
+                    bulk.second = std::chrono::seconds(std::time(NULL));
+                }
+                Logger::getInstance().set_commandCount();
+                bulk.first.emplace_back(str);
             }
-            bulk.first.emplace_back(std::forward<std::string>(str));
-        }
-        else if (!checkD.second)
-        {
-            notify();
-            clearData();
-        }
-    }
-    else
-    {
-        if (str!="{" && str!="}" && countTry)
-        {
-            if(bulk.first.size() == 0)
+            else if (!checkD.second)
             {
-                bulk.second = std::chrono::seconds(std::time(NULL));
+                write();
             }
-            bulk.first.emplace_back(std::forward<std::string>(str));
-            --countTry;
         }
-        if(!countTry)
+        else
         {
-            notify();
-            clearData();
+            if (str!="{" && str!="}" && countTry)
+            {
+                if(bulk.first.size() == 0)
+                {
+                    bulk.second = std::chrono::seconds(std::time(NULL));
+                }
+                Logger::getInstance().set_commandCount();
+                bulk.first.emplace_back(str);
+                --countTry;
+            }
+            if(!countTry)
+            {
+                write();
+            }
         }
+        
     }
-}
-    void DataIn::stop()
+    void DataIn::write()
     {
-        if(!bulk.first.empty())
-        {
-            notify();
-            clearData();
-        }
+        notify();
+        clearData();
     }
-
     void DataIn::notify() 
     {
-        for (auto s : subs) 
-        {
-            s->update(bulk);
-        }
+        Logger::getInstance().set_bulkCount();
+        setQueues();
+        cv.notify_all();
     }
 
     void DataIn::clearData()
-    {
+    {   
         bulk.first.clear();
         checkD.first = false;
         checkD.second = 0;
         countTry = count;
     }
 
-    int DataIn::getQuantity()
+    void DataIn::setQueues()
     {
-        return bulk.first.size();
+        for(auto& i : subs)
+        {
+            i->setBulk(bulk);
+        }
     }
-
 
 //-----Data to console methods-------------------------------------------------------------------
-    DataToConsole::DataToConsole(DataIn *data) 
+    DataToConsole::DataToConsole(DataIn* data):_data(data)
     {
         data->subscribe(this);
     }
 
-    void DataToConsole::update(Bulk bulk)
+    DataToConsole::~DataToConsole()
     {
-        std::cout << "bulk: ";
-        for(auto str = bulk.first.begin(); str!=bulk.first.end(); ++str)
-        {
-            if(str==bulk.first.begin()) std::cout << *str;
-            else std::cout << ", " << *str;
-        }
-        std::cout << std::endl;
+        Writer{} << "DataToConsole dest" << std::endl;
     }
 
+    void DataToConsole::setBulk(const Bulk& bulk)
+    {
+        std::lock_guard<std::mutex> l{_data->mtx_cmd};
+        bulkQ.push(bulk);
+    }
+
+    void DataToConsole::update(int id)
+    {
+        // Writer{}<< "THREAD until cicle " << id << std::endl;
+         while(_data->works || !bulkQ.empty())
+        {
+        // Writer{}<< "THREAD after cicle " << id << std::endl;
+            std::unique_lock<std::mutex> consolLock(_data->mtx_cmd);
+            _data->cv.wait(consolLock,[&](){
+            if(!bulkQ.empty() || !_data->works) return true;
+            else return false;
+            });
+        // Writer{}<< "THREAD into WAIT " << id << std::endl;
+
+            while(!bulkQ.empty())
+            {
+        // Writer{}<< "THREAD into while " << id << std::endl;
+                if(bulkQ.front().first.empty() ) break;
+                Logger::getInstance().set_bulkCount(id);
+                Writer::console(bulkQ.front().first,id);
+                bulkQ.pop();
+            }
+                
+        }
+    }
 
 //-----Data to file methods-----------------------------------------------------------------------
-    DataToFile::DataToFile(DataIn *data) 
+    DataToFile::DataToFile(DataIn* data):_data(data)
     {
         data->subscribe(this);
     }
 
-    void DataToFile::update(Bulk bulk)
-    {   
-        auto start(std::chrono::steady_clock::now());
-        std::ofstream out;
-        auto timeUNIX = bulk.second.count();
-        auto end(std::chrono::steady_clock::now());
-        using nanoseconds = std::chrono::duration<double,std::ratio<1,1'000'000'000>>;
-        auto diff = nanoseconds(end - start).count();
-        std::string path = "bulk"+ std::to_string(timeUNIX) + '.' + std::to_string(int(diff)) + ".log";
-        out.open(path);
-        if (out.is_open(),std::ios::app)
+    DataToFile::~DataToFile()
+    {
+        Writer{} << "DataToFile dest" << std::endl;
+    }
+
+    void DataToFile::setBulk(const Bulk& bulk)
+    {
+        std::lock_guard<std::mutex> l{_data->mtx_file};
+        bulkQ.push(bulk);
+    }
+
+    void DataToFile::update(int id)
+    {
+        while (_data->works || !bulkQ.empty())
         {
-            out << "bulk: ";
-            for(auto str = bulk.first.begin(); str!=bulk.first.end(); ++str)
-            {
-                if(str==bulk.first.begin()) out << *str;
-                else out << ", " << *str;
-            }
+            std::unique_lock<std::mutex> fileLock(_data->mtx_file);
+            _data->cv.wait(fileLock,[&](){
+            if(!bulkQ.empty() || !_data->works) return true;
+            else return false;
+            });
+                while (!bulkQ.empty())
+                {
+                    if(bulkQ.front().first.empty() ) break;
+                    auto start(std::chrono::steady_clock::now());
+                    Logger::getInstance().set_bulkCount(id);
+                    Writer::file(bulkQ.front(),id,start);
+                    bulkQ.pop();
+                }
         }
-        out.close();
     }
