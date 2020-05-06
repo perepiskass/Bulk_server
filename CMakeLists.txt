@@ -132,7 +132,7 @@ endif()
 
 # ----------------------------------------------------------------------
 
-install(TARGETS bulk_server RUNTIME DESTINATION bin)
+install(TARGETS bulk_server bulk_client RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 

@@ -4,9 +4,9 @@ client::client(): socket_(io_context)
 {
 }
 
-void client::connect(std::string& addres, size_t port)
+void client::connect(ba::ip::address& addres, size_t port)
 {
-    ep = ba::ip::tcp::endpoint(ba::ip::address::from_string(addres),port);
+    ep = ba::ip::tcp::endpoint(addres,port);
     socket_.connect(ep);
 }
 

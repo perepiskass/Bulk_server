@@ -34,12 +34,12 @@ public:
     ~DataIn();
     void setBulk(std::size_t bulk);
     void subscribe(Observer *obs);
-    void setData(std::string&& str);
+    void setData(std::string str);
     void write();
     void notify();
 
     std::vector<std::thread*> vec_thread;
-    std::queue<Bulk> bulkQ;
+    // std::queue<Bulk> bulkQ;
     std::condition_variable cv;
     std::mutex mtx_input;
     std::mutex mtx_cmd;
@@ -53,7 +53,7 @@ private:
 
     Subscrabers subs;
     std::pair<bool,uint8_t> checkD; ///< переменная для проверки использования знаков динамического разделения блоков "{" и "}" и хранения состояния о их кол-ве
-    Bulk bulk;
+    Bulk* bulk;
     std::size_t count;        ///< хранит информацию о размере блока, задаеться при запуске программы (инициализируеться в конструкторе)
     std::size_t countTry;           ///< оставшееся ко-во команд для ввода в блок для его формирования
 };

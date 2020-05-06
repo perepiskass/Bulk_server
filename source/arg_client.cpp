@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <boost/asio.hpp>
 
 /**
  * @brief Функция для проверки введенных аргументов программы.
@@ -18,10 +19,11 @@ auto checkArg(int argc,char** argv)
         }
         else
         {
-            std::pair<std::string,size_t> result;
-            result.first = argv[1];
+            std::pair<boost::asio::ip::address,size_t> result;
+            boost::system::error_code ec;
+            result.first = boost::asio::ip::address::from_string(argv[1], ec );
             result.second = atoi(argv[2]);
-            if (result.second > 0)  // regexpr
+            if (!ec && result.second > 0) 
             {
                 return result;
             } 
@@ -35,7 +37,7 @@ auto checkArg(int argc,char** argv)
     }
     else 
     {
-      std::cout << "Usage: async_tcp_echo_server <ip_address> <port> or -version" << std::endl;
+      std::cout << "Usage: bulk_client <ip_address> <port> or -version" << std::endl;
       exit(0);
     }
     

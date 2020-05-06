@@ -4,6 +4,7 @@
 //-----Data input methods----------------------------------------------------------------------
     DataIn::DataIn(int count):count(count),countTry(count)
     {
+        bulk = nullptr;
         works = true;
     }
 
@@ -36,11 +37,11 @@
             if(checkD.first) ++checkD.second;
             else
             {
-                if(bulk.first.size())
-                {
-                    notify();
-                    bulk.first.clear();
-                }
+                // if(bulk.first.size())
+                // {
+                //     notify();
+                //     bulk.first.clear();
+                // }
                 checkD.first = true;
                 ++checkD.second;
             }
@@ -52,23 +53,25 @@
         }
     }
 
-    void DataIn::setData(std::string&& str) 
+    void DataIn::setData(std::string str) 
     {
+        if (bulk == nullptr) bulk = new Bulk{};
         // std::scoped_lock sl{mtx_cmd,mtx_file};
         // Writer{} << "From setData - " << str << std::endl;
-        Logger::getInstance().set_lineCount(0);
+        // Logger::getInstance().set_lineCount(0);
 
         checkDilimiter(str);
         if(checkD.first)
         {
             if (str!="{" && str!="}")
             {
-                if(bulk.first.size() == 0) 
+                if(bulk->first.size() == 0) 
                 {
-                    bulk.second = std::chrono::seconds(std::time(NULL));
+                    bulk->second = std::chrono::seconds(std::time(NULL));
                 }
-                Logger::getInstance().set_commandCount();
-                bulk.first.emplace_back(str);
+                // Writer{} << "push to bulk - " << str << std::endl;
+                // Logger::getInstance().set_commandCount();
+                bulk->first.emplace_back(std::forward<std::string>(str));
             }
             else if (!checkD.second)
             {
@@ -79,12 +82,13 @@
         {
             if (str!="{" && str!="}" && countTry)
             {
-                if(bulk.first.size() == 0)
+                if(bulk->first.size() == 0)
                 {
-                    bulk.second = std::chrono::seconds(std::time(NULL));
+                    bulk->second = std::chrono::seconds(std::time(NULL));
                 }
-                Logger::getInstance().set_commandCount();
-                bulk.first.emplace_back(str);
+                // Writer{} << "push to bulk - " << str << std::endl;
+                // Logger::getInstance().set_commandCount();
+                bulk->first.emplace_back(std::forward<std::string>(str));
                 --countTry;
             }
             if(!countTry)
@@ -101,14 +105,22 @@
     }
     void DataIn::notify() 
     {
-        Logger::getInstance().set_bulkCount();
-        setQueues();
-        cv.notify_all();
+        // Logger::getInstance().set_bulkCount();
+        Writer{} << "notify" << std::endl;
+        if(bulk)
+        {
+            setQueues();
+            cv.notify_all();
+        }
     }
 
     void DataIn::clearData()
     {   
-        bulk.first.clear();
+        // bulk.first.erase(std::begin(bulk.first),std::end(bulk.first));
+        Writer{} << "clearData - " << std::endl;
+        // if (bulk.first.empty()) Writer{} << "vector empty!" << std::endl;
+        delete bulk;
+        bulk = nullptr;
         checkD.first = false;
         checkD.second = 0;
         countTry = count;
@@ -118,7 +130,8 @@
     {
         for(auto& i : subs)
         {
-            i->setBulk(bulk);
+            Writer{} << "send bulk " << bulk->first.front() << std::endl;
+            i->setBulk(*bulk);
         }
     }
 
@@ -137,6 +150,7 @@
     {
         std::lock_guard<std::mutex> l{_data->mtx_cmd};
         bulkQ.push(bulk);
+        Writer{} << "setBulk - " << bulk.first.front() << std::endl;
     }
 
     void DataToConsole::update(int id)
@@ -150,13 +164,13 @@
             if(!bulkQ.empty() || !_data->works) return true;
             else return false;
             });
-        // Writer{}<< "THREAD into WAIT " << id << std::endl;
+        Writer{}<< "THREAD into WAIT " << bulkQ.front().first.front() << std::endl;
 
             while(!bulkQ.empty())
             {
-        // Writer{}<< "THREAD into while " << id << std::endl;
+        Writer{}<< "THREAD into while " << bulkQ.front().first.front() << std::endl;
                 if(bulkQ.front().first.empty() ) break;
-                Logger::getInstance().set_bulkCount(id);
+                // Logger::getInstance().set_bulkCount(id);
                 Writer::console(bulkQ.front().first,id);
                 bulkQ.pop();
             }
@@ -194,7 +208,7 @@
                 {
                     if(bulkQ.front().first.empty() ) break;
                     auto start(std::chrono::steady_clock::now());
-                    Logger::getInstance().set_bulkCount(id);
+                    // Logger::getInstance().set_bulkCount(id);
                     Writer::file(bulkQ.front(),id,start);
                     bulkQ.pop();
                 }

@@ -9,7 +9,7 @@ class client
 {
     public:
         client();
-        void connect(std::string& addres, size_t port);
+        void connect(ba::ip::address& addres, size_t port);
         void disconnect();
         void write(std::string&& str);
     private:

@@ -2,8 +2,23 @@
 #include "asio_client.h"
 #include <iostream>
 #include <string>
+#include <csignal>
 
-std::pair<std::string,size_t> checkArg(int argc,char** argv);
+std::pair<ba::ip::address,size_t> checkArg(int argc,char** argv);
+
+client* clientPtr;
+
+void signalFunction(int signal)
+{
+  std::cout << std::endl;
+  if (signal == 2)
+  {
+    clientPtr->disconnect();
+    delete clientPtr;
+    exit(0);
+  }
+  exit(1);
+}
 
 
 int main(int argc, char *argv[]) 
@@ -11,14 +26,17 @@ int main(int argc, char *argv[])
   auto args = checkArg(argc,argv);
   try
   {
-      client cli{};
-      cli.connect(args.first,args.second);
+    clientPtr = new client{};
+    clientPtr->connect(args.first,args.second);
 
-      std::string str;
-      while(getline(std::cin,str))
-      {
-        cli.write(std::move(str));
-      }
+    signal(SIGINT,signalFunction);
+
+
+    std::string str;
+    while(getline(std::cin,str))
+    {
+      clientPtr->write(std::move(str));
+    }
   }
   
   catch(const std::exception& e)

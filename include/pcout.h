@@ -27,7 +27,7 @@ class Writer:public std::stringstream
         std::cout << "bulk " << id << ": ";
         for(auto str = bulks.begin(); str!=bulks.end(); ++str)
         {
-            Logger::getInstance().set_commandCount(id);
+            // Logger::getInstance().set_commandCount(id);
             if(str==bulks.begin()) std::cout << *str;
             else std::cout << ", " << *str;
         }
@@ -48,7 +48,7 @@ class Writer:public std::stringstream
             out << "bulk " << id << ": ";
             for(auto str = bulks.first.begin(); str!=bulks.first.end(); ++str)
             {
-                Logger::getInstance().set_commandCount(id);
+                // Logger::getInstance().set_commandCount(id);
                 if(str==bulks.first.begin()) out << *str;
                 else out << ", " << *str;
             }

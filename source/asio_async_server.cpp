@@ -25,12 +25,21 @@ bool bulk::checkSession()
 
 void bulk::setCommand(const char* str)
 {
-  if(checkCommand(str)) async::receive(bulk_session,str,strlen(str));
-  else async::receive(bulk_server,str,strlen(str));
+  if(checkCommand(str))
+  {
+   async::receive(bulk_session,str,strlen(str));
+   std::cout << "bulk_session - start " << str << std::endl;
+  }
+  else
+  {
+   async::receive(bulk_server,str,strlen(str));
+   std::cout << "bulk_server - start " << str << std::endl;
+  }
 }
 
 bool bulk::checkCommand(std::string data)
 {
+  std::cout << "checkCommand " << data << std::endl;
   if(data == "{")
   {
     if(delimetr) 
@@ -40,9 +49,12 @@ bool bulk::checkCommand(std::string data)
     }
     else
     {
+      std::cout << "connect start" << std::endl;
       bulk_session = async::connect(1);
       ++delimetr;
+      std::cout << "display start" << std::endl;
       async::display(bulk_server);
+      std::cout << "display end" << std::endl;
       return true;
     }
   }
@@ -52,6 +64,7 @@ bool bulk::checkCommand(std::string data)
     {
       --delimetr;
       async::disconnect(bulk_session);
+      bulk_session = nullptr;
       return false;
     }
     else if (!delimetr) return false;
