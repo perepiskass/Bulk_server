@@ -35,11 +35,11 @@ add_executable(bulk_client ${CMAKE_SOURCE_DIR}/source/client.cpp ${CMAKE_SOURCE_
 ${CMAKE_SOURCE_DIR}/source/asio_client.cpp)
 # Создаем библиотеку с именем versionlib из источника - файла с именем version_lib.cpp
 add_library(versionlib ${CMAKE_SOURCE_DIR}/source/version_lib.cpp)
-add_library(asynklib ${CMAKE_SOURCE_DIR}/source/myasync.cpp ${CMAKE_SOURCE_DIR}/source/data.cpp)
+add_library(async ${CMAKE_SOURCE_DIR}/source/myasync.cpp ${CMAKE_SOURCE_DIR}/source/data.cpp)
 
 # Создаем исполняемый фаил google_test из test.cpp (для Boost test)
 # Создаем исполняемый фаил gtest из gtest.cpp
-# add_library(asynklib ${CMAKE_SOURCE_DIR}/source/myasync.cpp ${CMAKE_SOURCE_DIR}/source/data.cpp)
+# add_library(async ${CMAKE_SOURCE_DIR}/source/myasync.cpp ${CMAKE_SOURCE_DIR}/source/data.cpp)
 add_executable(gtest  ${CMAKE_SOURCE_DIR}/source/gtest.cpp  ${CMAKE_SOURCE_DIR}/source/arg.cpp)
 # --------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ add_executable(gtest  ${CMAKE_SOURCE_DIR}/source/gtest.cpp  ${CMAKE_SOURCE_DIR}/
 
 # УСТАНАВЛИВАЕМ СВОЙСТВА ДЛЯ КОМПИЛЯЦИИ ИСПОЛНЯЕМЫМ ФАЙЛАМ И БИБЛИОТЕКАМ----
 
-set_target_properties(bulk_server bulk_client versionlib asynklib gtest PROPERTIES
+set_target_properties(bulk_server bulk_client versionlib async gtest PROPERTIES
 # Стандарт С++ версии 17
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
@@ -63,7 +63,7 @@ target_include_directories(bulk_client
 target_include_directories(versionlib
     PRIVATE "${CMAKE_SOURCE_DIR}/include"
 )
-target_include_directories(asynklib
+target_include_directories(async
     PRIVATE "${CMAKE_SOURCE_DIR}/include"
 )
 target_include_directories(gtest
@@ -73,7 +73,7 @@ target_include_directories(gtest
 
 target_link_libraries(bulk_server PRIVATE
     versionlib
-    asynklib
+    async
     ${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     Threads::Threads
@@ -83,6 +83,9 @@ target_link_libraries(bulk_client PRIVATE
     ${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     Threads::Threads
+)
+target_link_libraries(async PRIVATE
+ Threads::Threads
 )
 
 
@@ -106,7 +109,7 @@ if (MSVC)
     target_compile_options(versionlib PRIVATE
         /W4
     )
-    target_compile_options(asynklib PRIVATE
+    target_compile_options(async PRIVATE
     /W4
     )
     target_compile_options(gtest PRIVATE
@@ -122,7 +125,7 @@ else ()
     target_compile_options(versionlib PRIVATE
     -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(asynklib PRIVATE
+    target_compile_options(async PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(gtest PRIVATE

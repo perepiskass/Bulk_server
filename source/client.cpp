@@ -31,7 +31,6 @@ int main(int argc, char *argv[])
 
     signal(SIGINT,signalFunction);
 
-
     std::string str;
     while(getline(std::cin,str))
     {

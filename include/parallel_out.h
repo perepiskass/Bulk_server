@@ -3,7 +3,6 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <sstream>
 #include <vector>
 #include <string>
 #include <ctime>
@@ -15,7 +14,9 @@ using Time = std::chrono::seconds;
 using Time_point = std::chrono::_V2::steady_clock::time_point;
 using Bulk = std::pair<std::vector<std::string>,Time>;
 
-
+/**
+ * @brief Класс для вывода информации(в файл, в консоль) в параллельной среде.
+ */
 class Writer:public std::stringstream
 {
     private:
@@ -27,7 +28,7 @@ class Writer:public std::stringstream
         std::cout << "bulk " << id << ": ";
         for(auto str = bulks.begin(); str!=bulks.end(); ++str)
         {
-            // Logger::getInstance().set_commandCount(id);
+            Logger::getInstance().set_commandCount(id);
             if(str==bulks.begin()) std::cout << *str;
             else std::cout << ", " << *str;
         }
@@ -48,7 +49,7 @@ class Writer:public std::stringstream
             out << "bulk " << id << ": ";
             for(auto str = bulks.first.begin(); str!=bulks.first.end(); ++str)
             {
-                // Logger::getInstance().set_commandCount(id);
+                Logger::getInstance().set_commandCount(id);
                 if(str==bulks.first.begin()) out << *str;
                 else out << ", " << *str;
             }

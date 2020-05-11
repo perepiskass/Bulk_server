@@ -14,19 +14,18 @@ void signalFunction(const boost::system::error_code & err, int signal)
     {
       serverPtr->~server();
       delete serverPtr;
+      logger::printLog();
+      exit(0);
     }
-    exit(0);
   }
+  exit(1);
 }
 
 int main(int argc, char *argv[]) 
 {
-
-  auto args = checkArg(argc,argv);
-    
   try
   {
-
+    auto args = checkArg(argc,argv);
 
     boost::asio::io_service io_service;
 
@@ -35,8 +34,6 @@ int main(int argc, char *argv[])
 
     serverPtr = new server(io_service, args);
     io_service.run();
-
-    std::cout << "It is a server" << std::endl;
   }
   
   catch(const std::exception& e)
