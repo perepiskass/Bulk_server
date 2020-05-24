@@ -1,0 +1,11 @@
+<map id="main" name="main">
+<area shape="rect" id="node2" href="$client_8cpp.html#a295624ccf167b5fa6dc4e9b98b06d8cf" title="Функция для получения введенных аргументов программы порта и размера bulk. " alt="" coords="134,5,199,32"/>
+<area shape="rect" id="node3" href="$classclient.html#abc0fb18a35d6c2fd84e5e3697d7e75a3" title="client::connect" alt="" coords="108,56,225,83"/>
+<area shape="rect" id="node4" href="$client_8cpp.html#a83e80f0b6037370db8a6c91b2a14be35" title="signalFunction" alt="" coords="109,107,224,133"/>
+<area shape="rect" id="node6" href="$classclient.html#a3e97f68af9e2d0a5b4ad35eb2d1c6c64" title="client::write" alt="" coords="117,157,216,184"/>
+<area shape="rect" id="node5" href="$classclient.html#aa47d71abf6751df6643b4252b31fb0cd" title="client::disconnect" alt="" coords="273,107,409,133"/>
+<area shape="rect" id="node7" href="$namespaceasync.html#a17211bb811a8c362fd173ad5f58e3248" title="async::write" alt="" coords="291,157,392,184"/>
+<area shape="rect" id="node8" href="$classDataIn.html#a9b5101154d49b88837b4f6d98a86f894" title="DataIn::write" alt="" coords="457,157,564,184"/>
+<area shape="rect" id="node9" href="$classLogger.html#afbe890cea4f5034d431905a8578f9f22" title="Logger::getInstance" alt="" coords="620,132,771,159"/>
+<area shape="rect" id="node10" href="$classLogger.html#acffd176578c0dcae57569da73158fb99" title="Logger::set_bulkCount" alt="" coords="612,183,779,209"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="DataIn::setData" name="DataIn::setData">
+<area shape="rect" id="node2" href="$namespaceasync.html#ad266274d333ab1a1840e230de371b32e" title="async::setCommands" alt="" coords="177,5,340,32"/>
+<area shape="rect" id="node3" href="$namespaceasync.html#a0335da84c092cafa3c5cb6252819571b" title="async::receive" alt="" coords="388,5,504,32"/>
+<area shape="rect" id="node4" href="$classHandler.html#a5ff7f15a05eb8efd488d3a1ba73ce75a" title="Handler::setCommand" alt="" coords="552,5,720,32"/>
+<area shape="rect" id="node5" href="$classsession.html#ad69144e27f558b8960efae132f2e15f4" title="session::start" alt="" coords="768,5,877,32"/>
+</map>

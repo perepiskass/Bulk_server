@@ -1,0 +1,11 @@
+<map id="Logger::set_commandCount" name="Logger::set_commandCount">
+<area shape="rect" id="node2" href="$classWriter.html#a669b41ca52cac91766fccbd14e03961d" title="Writer::console" alt="" coords="260,5,379,32"/>
+<area shape="rect" id="node4" href="$classWriter.html#aaa0ea45a2e7b891a4cd8072c823b1ba2" title="Writer::file" alt="" coords="275,56,364,83"/>
+<area shape="rect" id="node6" href="$classDataIn.html#a46b7d0105f3e97597e0512a7e0f91056" title="DataIn::setData" alt="" coords="257,107,381,133"/>
+<area shape="rect" id="node3" href="$classDataToConsole.html#a80370d5a685c99d8ffd1b5aeb4c030c6" title="DataToConsole::update" alt="" coords="429,5,601,32"/>
+<area shape="rect" id="node5" href="$classDataToFile.html#a3f67b44ba57b0c3e3e8f451f131d2883" title="DataToFile::update" alt="" coords="444,56,587,83"/>
+<area shape="rect" id="node7" href="$namespaceasync.html#ad266274d333ab1a1840e230de371b32e" title="async::setCommands" alt="" coords="434,107,597,133"/>
+<area shape="rect" id="node8" href="$namespaceasync.html#a0335da84c092cafa3c5cb6252819571b" title="async::receive" alt="" coords="649,107,765,133"/>
+<area shape="rect" id="node9" href="$classHandler.html#a5ff7f15a05eb8efd488d3a1ba73ce75a" title="Handler::setCommand" alt="" coords="813,107,981,133"/>
+<area shape="rect" id="node10" href="$classsession.html#ad69144e27f558b8960efae132f2e15f4" title="session::start" alt="" coords="1029,107,1139,133"/>
+</map>

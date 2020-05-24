@@ -1,0 +1,10 @@
+<map id="main" name="main">
+<area shape="rect" id="node2" href="$server_8cpp.html#a263feb93a5b9faedc8214c55b0f7d008" title="Функция для получения введенных аргументов программы порта и размера bulk. " alt="" coords="133,69,198,96"/>
+<area shape="rect" id="node6" href="$server_8cpp.html#a5c372d6dfc8d80c5cf10fb824584628f" title="signalFunction" alt="" coords="108,132,223,159"/>
+<area shape="rect" id="node3" href="$version__lib_8h.html#a611014f17df7beb38556969d507c35a8" title="version_major" alt="" coords="275,5,390,32"/>
+<area shape="rect" id="node4" href="$version__lib_8h.html#ad4af1896cb52e820ec682991f84fe4fe" title="version_minor" alt="" coords="275,56,390,83"/>
+<area shape="rect" id="node5" href="$version__lib_8h.html#a3bbf8a2e2598558e5e6ff1dfb1345db8" title="version_patch" alt="" coords="276,107,389,133"/>
+<area shape="rect" id="node7" href="$namespacelogger.html#ad441174e1c2d29741cebde25d90b28c2" title="logger::printLog" alt="" coords="271,157,395,184"/>
+<area shape="rect" id="node8" href="$classLogger.html#afbe890cea4f5034d431905a8578f9f22" title="Logger::getInstance" alt="" coords="443,132,593,159"/>
+<area shape="rect" id="node9" href="$classLogger.html#a2c423ec68d39fde1fabe8c78928e859f" title="Logger::print" alt="" coords="466,183,570,209"/>
+</map>

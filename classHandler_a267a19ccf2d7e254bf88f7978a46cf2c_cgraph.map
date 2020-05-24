@@ -1,0 +1,9 @@
+<map id="Handler::checkCommand" name="Handler::checkCommand">
+<area shape="rect" id="node2" href="$namespaceasync.html#a003d1a6899dca20ddcbff67a6abfb491" title="async::connect" alt="" coords="250,31,369,57"/>
+<area shape="rect" id="node5" href="$namespaceasync.html#a17211bb811a8c362fd173ad5f58e3248" title="async::write" alt="" coords="259,81,360,108"/>
+<area shape="rect" id="node8" href="$namespaceasync.html#a04233bf9bec326f7bcb4e1a9d5b8ee9d" title="async::disconnect" alt="" coords="240,132,379,159"/>
+<area shape="rect" id="node3" href="$classLogger.html#afbe890cea4f5034d431905a8578f9f22" title="Logger::getInstance" alt="" coords="615,5,765,32"/>
+<area shape="rect" id="node4" href="$classLogger.html#ae0689cfb3d7085d73cbae10eb493d389" title="Logger::setCount" alt="" coords="427,31,559,57"/>
+<area shape="rect" id="node6" href="$classDataIn.html#a9b5101154d49b88837b4f6d98a86f894" title="DataIn::write" alt="" coords="439,81,546,108"/>
+<area shape="rect" id="node7" href="$classLogger.html#acffd176578c0dcae57569da73158fb99" title="Logger::set_bulkCount" alt="" coords="607,81,773,108"/>
+</map>

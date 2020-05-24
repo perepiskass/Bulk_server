@@ -1,0 +1,15 @@
+<map id="Handler::setCommand" name="Handler::setCommand">
+<area shape="rect" id="node2" href="$classHandler.html#a267a19ccf2d7e254bf88f7978a46cf2c" title="Handler::checkCommand" alt="" coords="385,111,572,137"/>
+<area shape="rect" id="node10" href="$namespaceasync.html#a0335da84c092cafa3c5cb6252819571b" title="async::receive" alt="" coords="221,180,337,207"/>
+<area shape="rect" id="node3" href="$namespaceasync.html#a003d1a6899dca20ddcbff67a6abfb491" title="async::connect" alt="" coords="630,56,749,83"/>
+<area shape="rect" id="node6" href="$namespaceasync.html#a17211bb811a8c362fd173ad5f58e3248" title="async::write" alt="" coords="639,107,740,133"/>
+<area shape="rect" id="node9" href="$namespaceasync.html#a04233bf9bec326f7bcb4e1a9d5b8ee9d" title="async::disconnect" alt="" coords="620,157,759,184"/>
+<area shape="rect" id="node4" href="$classLogger.html#afbe890cea4f5034d431905a8578f9f22" title="Logger::getInstance" alt="" coords="1067,132,1217,159"/>
+<area shape="rect" id="node5" href="$classLogger.html#ae0689cfb3d7085d73cbae10eb493d389" title="Logger::setCount" alt="" coords="843,5,975,32"/>
+<area shape="rect" id="node7" href="$classDataIn.html#a9b5101154d49b88837b4f6d98a86f894" title="DataIn::write" alt="" coords="855,107,962,133"/>
+<area shape="rect" id="node8" href="$classLogger.html#acffd176578c0dcae57569da73158fb99" title="Logger::set_bulkCount" alt="" coords="1059,81,1225,108"/>
+<area shape="rect" id="node11" href="$namespaceasync.html#ad266274d333ab1a1840e230de371b32e" title="async::setCommands" alt="" coords="397,205,560,232"/>
+<area shape="rect" id="node12" href="$classDataIn.html#a46b7d0105f3e97597e0512a7e0f91056" title="DataIn::setData" alt="" coords="627,208,751,235"/>
+<area shape="rect" id="node13" href="$classLogger.html#afb488482288f08f750428c410d4c98ad" title="Logger::set_lineCount" alt="" coords="827,208,990,235"/>
+<area shape="rect" id="node14" href="$classLogger.html#af947354159cfea459f988d3e570e46a6" title="Logger::set_commandCount" alt="" coords="807,259,1011,285"/>
+</map>
