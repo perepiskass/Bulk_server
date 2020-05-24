@@ -40,8 +40,8 @@ class Writer:public std::stringstream
         std::ofstream out;
         auto timeUNIX = bulks.second.count();
         auto end(std::chrono::steady_clock::now());
-        using nanoseconds = std::chrono::duration<double,std::ratio<1,1'000'000'000>>;
-        auto diff = nanoseconds(end - start).count();
+        using sec_ten_million = std::chrono::duration<double,std::ratio<1,10'000'000'000>>;
+        auto diff = sec_ten_million(end - start).count();
         std::string path = "bulk"+ std::to_string(timeUNIX) + '.' + std::to_string(int(diff)) + ".log";
         out.open(path);
         if (out.is_open(),std::ios::app)

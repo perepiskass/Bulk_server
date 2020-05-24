@@ -1,10 +1,8 @@
 #include "version_lib.h"
 #include "asio_client.h"
-#include <iostream>
-#include <string>
 #include <csignal>
 
-std::pair<ba::ip::address,size_t> checkArg(int argc,char** argv);
+std::pair<ba::ip::address,size_t> getArg(int argc,char** argv);
 
 client* clientPtr;
 
@@ -23,7 +21,7 @@ void signalFunction(int signal)
 
 int main(int argc, char *argv[]) 
 {
-  auto args = checkArg(argc,argv);
+  auto args = getArg(argc,argv);
   try
   {
     clientPtr = new client{};

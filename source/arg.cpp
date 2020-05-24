@@ -4,9 +4,9 @@
 #include <utility>
 
 /**
- * @brief Функция для проверки введенных аргументов программы порта и размера bulk.
+ * @brief Функция для получения введенных аргументов программы порта и размера bulk.
  */
-auto checkArg(int argc,char** argv)
+auto getArg(int argc,char** argv)
 {
     if ( argc > 1)
     {

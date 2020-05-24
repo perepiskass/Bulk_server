@@ -149,7 +149,7 @@ include(CPack)
 
 enable_testing()
 
-add_test(version_test_case bulk_server)
+add_test(version_test_case gtest)
 
 
 

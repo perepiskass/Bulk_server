@@ -1,14 +1,9 @@
 #pragma once
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
 #include <algorithm>
 #include <queue>
 #include <sstream>
 #include <atomic>
 #include <thread>
-#include <mutex>
 #include <condition_variable>
 
 #include "parallel_out.h"

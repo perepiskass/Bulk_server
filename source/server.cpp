@@ -2,7 +2,7 @@
 #include "asio_async_server.h"
 #include <iostream>
 
-std::pair<size_t,size_t> checkArg(int argc,char** argv);
+std::pair<size_t,size_t> getArg(int argc,char** argv);
 server* serverPtr;
 
 void signalFunction(const boost::system::error_code & err, int signal)
@@ -12,7 +12,6 @@ void signalFunction(const boost::system::error_code & err, int signal)
     std::cout << std::endl;
     if (signal == 2)
     {
-      serverPtr->~server();
       delete serverPtr;
       logger::printLog();
       exit(0);
@@ -25,7 +24,7 @@ int main(int argc, char *argv[])
 {
   try
   {
-    auto args = checkArg(argc,argv);
+    auto args = getArg(argc,argv);
 
     boost::asio::io_service io_service;
 

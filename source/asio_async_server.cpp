@@ -56,6 +56,7 @@ bool Handler::checkCommand(std::string data)
     {
       --delimetr_count;
       async::disconnect(handle_session);
+
       handle_session = nullptr;
       return false;
     }
@@ -102,7 +103,7 @@ void session::do_read()
         {
           session::count--;
           if(bulk_.checkSession()) async::disconnect(bulk_.getSessionHandle());
-          if(session::count == 0) async::disconnect(bulk_.getServerHandle());
+          if(session::count == 0) async::write(bulk_.getServerHandle());
         }
       });
 }
@@ -118,6 +119,7 @@ server::server(boost::asio::io_service& io_service, std::pair<size_t,size_t>& ar
 server::~server()
 {
   acceptor_.close();
+  async::disconnect(bulk_);
 }
 
 void server::do_accept(async::handle_t bulk)

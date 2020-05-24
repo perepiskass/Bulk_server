@@ -66,7 +66,6 @@ void disconnect(handle_t handle)
     }
     delete _handle;
 }
-
 }
 
 namespace logger
