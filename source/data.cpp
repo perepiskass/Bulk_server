@@ -8,20 +8,11 @@
 
     DataIn::~DataIn()
     {
-        for(auto&i : vec_thread)
-        {
-            delete i;
-        }
-        for(auto& i : subs)
-        {
-            delete i;
-        }
-        delete bulk;
     }
 
     void DataIn::subscribe(Observer *obs)
     {
-        subs.push_back(obs);
+        subs.emplace_back(obs);
     }
 
     void DataIn::checkDilimiter(std::string& str)
@@ -48,7 +39,7 @@
 
     void DataIn::setData(std::string&& str) 
     {
-        if(bulk == nullptr) bulk = new Bulk{};
+        if(bulk == nullptr) bulk.reset(new Bulk{});
         Logger::getInstance().set_lineCount(0);
 
         checkDilimiter(str);
@@ -96,7 +87,7 @@
 
     void DataIn::notify()
     {
-        if(bulk)
+        if(bulk != nullptr)
         {
             Logger::getInstance().set_bulkCount();
             setQueues();
@@ -104,7 +95,6 @@
         }
         else cv.notify_all();
 
-        delete bulk;
         bulk = nullptr;
     }
 

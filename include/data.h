@@ -18,7 +18,7 @@ public:
     virtual ~Observer() = default;
 };
 
-using Subscrabers = std::vector<Observer*>;
+using Subscrabers = std::vector<std::unique_ptr<Observer>>;
 
 /**
  * @brief Класс для сбора и формирования команд в группы(bulk).
@@ -33,7 +33,7 @@ public:
     void setData(std::string&& str);
     void write();
 
-    std::vector<std::thread*> vec_thread;
+    std::vector<std::unique_ptr<std::thread>> vec_thread;
     std::condition_variable cv;
     std::mutex mtx_input;
     std::mutex mtx_cmd;
@@ -48,7 +48,7 @@ private:
 
     Subscrabers subs;
     std::pair<bool,uint8_t> checkD; ///< переменная для проверки использования знаков динамического разделения блоков "{" и "}" и хранения состояния о их кол-ве
-    Bulk* bulk;
+    std::unique_ptr<Bulk> bulk;
     std::size_t count;        ///< хранит информацию о размере блока, задаеться при запуске программы (инициализируеться в конструкторе)
     std::size_t countTry;           ///< оставшееся ко-во команд для ввода в блок для его формирования
 };
