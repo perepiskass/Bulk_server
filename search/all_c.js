@@ -14,6 +14,6 @@ var searchData=
   ['setdata',['setData',['../classDataIn.html#a46b7d0105f3e97597e0512a7e0f91056',1,'DataIn']]],
   ['signalfunction',['signalFunction',['../client_8cpp.html#a83e80f0b6037370db8a6c91b2a14be35',1,'signalFunction(int signal):&#160;client.cpp'],['../server_8cpp.html#a5c372d6dfc8d80c5cf10fb824584628f',1,'signalFunction(const boost::system::error_code &amp;err, int signal):&#160;server.cpp']]],
   ['start',['start',['../classsession.html#ad69144e27f558b8960efae132f2e15f4',1,'session']]],
-  ['subscrabers',['Subscrabers',['../data_8h.html#a3cb4811d5ee429a7fbc8a3bbec41ec5f',1,'data.h']]],
+  ['subscrabers',['Subscrabers',['../data_8h.html#a96815e98eeb1b2d4290e8a50c142c9a7',1,'data.h']]],
   ['subscribe',['subscribe',['../classDataIn.html#a11226bd7930c3c74e20ca4a0a3283574',1,'DataIn']]]
 ];
