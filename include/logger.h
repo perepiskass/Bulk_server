@@ -12,36 +12,43 @@ class Logger
     size_t count = 1;
     std::map <const size_t,std::array<int,3>> m;
     Logger(){}
+    std::mutex log_mtx;
 
     public:
     static Logger& getInstance()
     {
+        std::unique_lock<std::mutex> log_mtx;
         static Logger logger;
         return logger;
     }
 
     void setCount(size_t c)
     {
+        std::unique_lock<std::mutex> log_mtx;
         count = c;
     }
 
     void set_lineCount(size_t id = 0)
     {
+        std::unique_lock<std::mutex> log_mtx;
         ++(m[id][0]);
     }
 
     void set_commandCount(size_t id = 0)
     {
+        std::unique_lock<std::mutex> log_mtx;
         ++(m[id][1]);
     }   
 
     void set_bulkCount(size_t id = 0)
     {
+        std::unique_lock<std::mutex> log_mtx;
         ++(m[id][2]);
     } 
 
     void print()
     {
+        std::unique_lock<std::mutex> log_mtx;
         std::cout << "Main thread: "    << m[0][0]<< "- lines," 
                         << m[0][1]<< "- commands,"
                         << m[0][2]<< "- bulks" << std::endl;

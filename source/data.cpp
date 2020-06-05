@@ -192,7 +192,7 @@
                     if(!bulkQ.front().first.empty())
                     {
                         auto start(std::chrono::steady_clock::now());
-                        Logger::getInstance().set_bulkCount(id);
+                        // Logger::getInstance().set_bulkCount(id);
                         Writer::file(bulkQ.front(),id,start);
                     }
                     bulkQ.pop();

@@ -7,6 +7,7 @@
 #include <string>
 #include <ctime>
 #include <chrono>
+#include <cstdlib>
 
 #include "logger.h"
 
@@ -40,11 +41,11 @@ class Writer:public std::stringstream
         std::ofstream out;
         auto timeUNIX = bulks.second.count();
         auto end(std::chrono::steady_clock::now());
-        using sec_ten_million = std::chrono::duration<double,std::ratio<1,10'000'000'000>>;
-        auto diff = sec_ten_million(end - start).count();
-        std::string path = "bulk"+ std::to_string(timeUNIX) + '.' + std::to_string(int(diff)) + ".log";
-        out.open(path);
-        if (out.is_open(),std::ios::app)
+        using sec_one_million = std::chrono::duration<double,std::ratio<1,1'000'000'000>>;
+        auto diff = sec_one_million(end - start).count();
+        std::string path = "bulk"+ std::to_string(timeUNIX) + '.' + std::to_string(int(diff))+'_'+ std::to_string(rand())+'_'+std::to_string(id) + ".log";
+        out.open(path,std::ios::out);
+        if (out.is_open())
         {
             out << "bulk " << id << ": ";
             for(auto str = bulks.first.begin(); str!=bulks.first.end(); ++str)
@@ -55,6 +56,7 @@ class Writer:public std::stringstream
             }
         }
         out.close();
+        Logger::getInstance().set_bulkCount(id);
     }
     ~Writer()
     {

@@ -14,7 +14,7 @@ endif()
 
 # ДОБАВЛЯЕМ В ПРОЕКТ ДОПОЛНИТЕЛЬНЫЕ БИБЛИОТЕКИ ДЛЯ ТЕСТИРОВАНИЯ-------------
 # Опция "REQUIRED" говорит о том, что библиотека необходима проекту. Без нее cmake решит, что отсутствие данной библиотеки - не так уж и страшно, и будет собирать дальше.
-find_package(Boost COMPONENTS system REQUIRED)
+find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(GTest REQUIRED)
 find_package(Threads)
 # Добавим директории с хедерами Boost, gtest и директорию с исходниками для поиска в них хедеров
@@ -52,7 +52,10 @@ set_target_properties(bulk_server bulk_client versionlib async gtest PROPERTIES
 # Стандарт С++ версии 17
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
-)
+
+    COMPILE_OPTIONS "-Wall;-Wpedantic;-Wextra;-fsanitize=thread"
+    LINK_FLAGS "-fsanitize=thread"
+    )
 
 target_include_directories(bulk_server
     PRIVATE "${CMAKE_SOURCE_DIR}/include"
@@ -117,7 +120,7 @@ if (MSVC)
     )
 else ()
     target_compile_options(bulk_server PRIVATE
-        -Wall -Wextra -pedantic -Werror
+        -Wall -Wextra -pedantic -Werror -fsanitize=thread
     )
     target_compile_options(bulk_client PRIVATE
         -Wall -Wextra -pedantic -Werror

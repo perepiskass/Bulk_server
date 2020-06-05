@@ -27,7 +27,7 @@ void setCommands(DataIn* _handle,std::string&& str)
 
 handle_t connect(std::size_t bulk) 
 {
-    static size_t i = 0;
+    static std::atomic<size_t> i;
     auto bulkPtr = new DataIn(bulk);
     auto cmdPtr = new DataToConsole(bulkPtr);
     auto filePtr = new DataToFile(bulkPtr);
