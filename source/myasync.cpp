@@ -4,6 +4,26 @@
 #include <thread>
 #include <chrono>
 #include <future>
+#include <memory>
+
+/**
+ * @brief Класс соответсвия указателя с индексом на него
+ */
+class MapData
+{
+    private:
+    size_t count = 1;
+    std::map <const size_t,std::array<int,3>> m;
+    MapData(){}
+    std::mutex log_mtx;
+
+    public:
+    static MapData& getInstance()
+    {
+        static MapData mapdata;
+        return mapdata;
+    }
+};
 
 namespace async 
 {
@@ -28,15 +48,15 @@ void setCommands(DataIn* _handle,std::string&& str)
 handle_t connect(std::size_t bulk) 
 {
     static std::atomic<size_t> i;
-    auto bulkPtr = new DataIn(bulk);
-    auto cmdPtr = new DataToConsole(bulkPtr);
-    auto filePtr = new DataToFile(bulkPtr);
+    auto bulkPtr =std::make_shared<DataIn>( new DataIn(bulk));
+    std::weak_ptr<DataToConsole> cmdPtr = std::make_shared<DataToConsole>(new DataToConsole(bulkPtr));
+    std::weak_ptr<DataToFile> filePtr = std::make_shared<DataToFile>(new DataToFile(bulkPtr));
     ++i;
-    bulkPtr->vec_thread.emplace_back(new std::thread ([cmdPtr](){cmdPtr->update(i);}));
+    bulkPtr->vec_thread.emplace_back(new std::thread ([cmdPtr](){cmdPtr.lock()->update(i);}));
     ++i;
-    bulkPtr->vec_thread.emplace_back(new std::thread ([filePtr](){filePtr->update(i);}));
+    bulkPtr->vec_thread.emplace_back(new std::thread ([filePtr](){filePtr.lock()->update(i);}));
     ++i;
-    bulkPtr->vec_thread.emplace_back(new std::thread ([filePtr](){filePtr->update(i);}));
+    bulkPtr->vec_thread.emplace_back(new std::thread ([filePtr](){filePtr.lock()->update(i);}));
 
     Logger::getInstance().setCount(i);
 

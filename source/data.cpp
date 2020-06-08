@@ -114,9 +114,9 @@
     }
 
 //-----Data to console methods-------------------------------------------------------------------
-    DataToConsole::DataToConsole(DataIn* data):_data(data)
+    DataToConsole::DataToConsole(std::weak_ptr<DataIn> data):_data(data)
     {
-        data->subscribe(this);
+        data.lock()->subscribe(this);
     }
 
     DataToConsole::~DataToConsole()
@@ -125,17 +125,17 @@
 
     void DataToConsole::setBulk(const Bulk& bulk)
     {
-        std::lock_guard<std::mutex> l{_data->mtx_cmd};
+        std::lock_guard<std::mutex> l{_data.lock()->mtx_cmd};
         bulkQ.push(bulk);
     }
 
     void DataToConsole::update(size_t id)
     {
-         while(_data->works || !bulkQ.empty())
+         while(_data.lock()->works || !bulkQ.empty())
         {
-            std::unique_lock<std::mutex> consolLock(_data->mtx_cmd);
-            _data->cv.wait(consolLock,[&](){
-            if(!bulkQ.empty() || !_data->works) return true;
+            std::unique_lock<std::mutex> consolLock(_data.lock()->mtx_cmd);
+            _data.lock()->cv.wait(consolLock,[&](){
+            if(!bulkQ.empty() || !_data.lock()->works) return true;
             else return false;
             });
 
@@ -153,9 +153,9 @@
     }
 
 //-----Data to file methods-----------------------------------------------------------------------
-    DataToFile::DataToFile(DataIn* data):_data(data)
+    DataToFile::DataToFile(std::weak_ptr<DataIn> data):_data(data)
     {
-        data->subscribe(this);
+        data.lock()->subscribe(this);
     }
 
     DataToFile::~DataToFile()
@@ -164,17 +164,17 @@
 
     void DataToFile::setBulk(const Bulk& bulk)
     {
-        std::lock_guard<std::mutex> l{_data->mtx_file};
+        std::lock_guard<std::mutex> l{_data.lock()->mtx_file};
         bulkQ.push(bulk);
     }
 
     void DataToFile::update(size_t id)
     {
-        while (_data->works || !bulkQ.empty())
+        while (_data.lock()->works || !bulkQ.empty())
         {
-            std::unique_lock<std::mutex> fileLock(_data->mtx_file);
-            _data->cv.wait(fileLock,[&](){
-            if(!bulkQ.empty() || !_data->works) return true;
+            std::unique_lock<std::mutex> fileLock(_data.lock()->mtx_file);
+            _data.lock()->cv.wait(fileLock,[&](){
+            if(!bulkQ.empty() || !_data.lock()->works) return true;
             else return false;
             });
                 while (!bulkQ.empty())

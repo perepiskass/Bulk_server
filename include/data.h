@@ -18,7 +18,7 @@ public:
     virtual ~Observer() = default;
 };
 
-using Subscrabers = std::vector<std::unique_ptr<Observer>>;
+using Subscrabers = std::vector<std::shared_ptr<Observer>>;
 
 /**
  * @brief Класс для сбора и формирования команд в группы(bulk).
@@ -33,7 +33,7 @@ public:
     void setData(std::string&& str);
     void write();
 
-    std::vector<std::unique_ptr<std::thread>> vec_thread;
+    std::vector<std::shared_ptr<std::thread>> vec_thread;
     std::condition_variable cv;
     std::mutex mtx_input;
     std::mutex mtx_cmd;
@@ -59,12 +59,12 @@ private:
 class DataToConsole:public Observer
 {
     private:
-        DataIn* _data;
+        std::weak_ptr<DataIn> _data;
         std::queue<Bulk> bulkQ;
 
     public:
         void setBulk(const Bulk& bulk) override;
-        DataToConsole(DataIn* data);
+        DataToConsole(std::weak_ptr<DataIn> data);
         ~DataToConsole()override;
         void update(size_t id);
 };
@@ -75,12 +75,12 @@ class DataToConsole:public Observer
 class DataToFile:public Observer
 {
     private:
-        DataIn* _data;
+        std::weak_ptr<DataIn> _data;
         std::queue<Bulk> bulkQ;
 
     public:
         void setBulk(const Bulk& bulk) override;
-        DataToFile(DataIn* data);
+        DataToFile(std::weak_ptr<DataIn> data);
         ~DataToFile()override;
         void update(size_t id);
 };
