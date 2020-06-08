@@ -21,15 +21,15 @@ bool Handler::checkSession()const
   else return false;
 }
 
-void Handler::setCommand(const char* str)
+void Handler::setCommand(std::string str)
 {
   if(checkCommand(str))
   {
-   async::receive(handle_session,str,strlen(str));
+   async::receive(handle_session,str.c_str(),str.length());
   }
   else
   {
-   async::receive(handle_server,str,strlen(str));
+   async::receive(handle_server,str.c_str(),str.length());
   }
 }
 
@@ -90,22 +90,26 @@ void session::start()
 void session::do_read()
 {
   auto self(shared_from_this());
-  socket_.async_read_some(boost::asio::buffer(data_, max_length),
-      [this, self](boost::system::error_code ec, std::size_t)
+  boost::asio::async_read(socket_, boost::asio::buffer(&data_, 1),
+  [this, self](boost::system::error_code ec, std::size_t)
+  {
+    if (ec!=boost::asio::error::eof) 
+    {
+      if(data_ != '\n') command += data_;
+      else
       {
-        if ( ec!=boost::asio::error::eof )
-        {
-          bulk_.setCommand(data_);
-          memset(data_,0,sizeof(data_));
-          do_read();
-        }
-        else 
-        {
-          session::count--;
-          if(bulk_.checkSession()) async::disconnect(bulk_.getSessionHandle());
-          if(session::count == 0) async::write(bulk_.getServerHandle());
-        }
-      });
+        bulk_.setCommand(command);
+        command = "";
+      }
+      do_read();
+    }
+    else
+    {
+      session::count--;
+      if(bulk_.checkSession()) async::disconnect(bulk_.getSessionHandle());
+      if(session::count == 0) async::write(bulk_.getServerHandle()); 
+    }
+  });
 }
 
 //-----server-----------------------------------------------------------

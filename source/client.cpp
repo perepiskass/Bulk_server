@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     std::string str;
     while(getline(std::cin,str))
     {
+      str+='\n';
       clientPtr->write(std::move(str));
     }
   }

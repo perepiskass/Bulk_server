@@ -59,20 +59,8 @@ namespace async
 
 void setCommands(std::shared_ptr<DataIn> _handle,std::string&& str)
 {
-    // auto _handle = MapData::getInstance().getPtr(handle);
     std::lock_guard<std::mutex> l{_handle->mtx_input};
-    const char delim = '\n';
-    std::string::size_type start = 0;
-    std::string::size_type end = 0;
-    do
-    {
-        start = str.find_first_not_of(delim,start);
-        end = str.find_first_of(delim,start);
-        _handle->setData(std::forward<std::string>(str.substr(start,end-start)));
-
-        start = end;
-    }
-    while(start != std::string::npos && end != str.size() -1);
+    _handle->setData(std::forward<std::string>(str));
 }
 
 handle_t connect(const size_t bulk) 
@@ -96,7 +84,7 @@ handle_t connect(const size_t bulk)
 void receive(handle_t handle,const char *data,std::size_t) 
 {
     auto _handle = MapData::getInstance().getPtr(handle);
-    auto as(std::async(std::launch::async,setCommands, _handle, std::move(std::string(data))));
+    auto as(std::async(setCommands, _handle, std::move(std::string(data))));
 }
 
 void write(handle_t handle)

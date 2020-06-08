@@ -12,7 +12,7 @@ class Handler
 {
   public:
     Handler(const async::handle_t& handle_);
-    void setCommand(const char* str);
+    void setCommand(std::string str);
     bool checkCommand(std::string data);
     bool checkSession()const;
     async::handle_t getServerHandle()const;
@@ -34,8 +34,8 @@ class session: public std::enable_shared_from_this<session>
     void do_read();
 
     tcp::socket socket_;
-    enum { max_length = 1024 };
-    char data_[max_length];
+    char data_;
+    std::string command;
     Handler bulk_;
     static size_t count;
 };
