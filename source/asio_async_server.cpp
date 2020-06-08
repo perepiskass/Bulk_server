@@ -57,7 +57,7 @@ bool Handler::checkCommand(std::string data)
       --delimetr_count;
       async::disconnect(handle_session);
 
-      handle_session = nullptr;
+      handle_session = 0;
       return false;
     }
     else if (!delimetr_count) return false;

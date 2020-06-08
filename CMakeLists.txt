@@ -47,7 +47,7 @@ add_executable(gtest  ${CMAKE_SOURCE_DIR}/source/gtest.cpp  ${CMAKE_SOURCE_DIR}/
 
 # УСТАНАВЛИВАЕМ СВОЙСТВА ДЛЯ КОМПИЛЯЦИИ ИСПОЛНЯЕМЫМ ФАЙЛАМ И БИБЛИОТЕКАМ----
 
-set_target_properties(bulk_server bulk_client versionlib async gtest PROPERTIES
+set_target_properties(bulk_server PROPERTIES
 # Стандарт С++ версии 17
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
@@ -55,7 +55,12 @@ set_target_properties(bulk_server bulk_client versionlib async gtest PROPERTIES
     COMPILE_OPTIONS "-Wall;-Wpedantic;-Wextra;-fsanitize=thread"
     LINK_FLAGS "-fsanitize=thread"
     )
-
+set_target_properties(bulk_client versionlib async gtest PROPERTIES
+# Стандарт С++ версии 17
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    )
+    
 target_include_directories(bulk_server
     PRIVATE "${CMAKE_SOURCE_DIR}/include"
 )

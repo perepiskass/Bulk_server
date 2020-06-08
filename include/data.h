@@ -26,14 +26,14 @@ using Subscrabers = std::vector<std::shared_ptr<Observer>>;
 class DataIn
 {
 public:
-    DataIn(int size);
+    DataIn(const size_t size);
     ~DataIn();
     void setBulk(std::size_t bulk);
     void subscribe(Observer *obs);
     void setData(std::string&& str);
     void write();
-
-    std::vector<std::shared_ptr<std::thread>> vec_thread;
+public:
+    std::vector<std::unique_ptr<std::thread>> vec_thread;
     std::condition_variable cv;
     std::mutex mtx_input;
     std::mutex mtx_cmd;
@@ -64,7 +64,7 @@ class DataToConsole:public Observer
 
     public:
         void setBulk(const Bulk& bulk) override;
-        DataToConsole(std::weak_ptr<DataIn> data);
+        DataToConsole(std::shared_ptr<DataIn> data);
         ~DataToConsole()override;
         void update(size_t id);
 };
@@ -80,7 +80,7 @@ class DataToFile:public Observer
 
     public:
         void setBulk(const Bulk& bulk) override;
-        DataToFile(std::weak_ptr<DataIn> data);
+        DataToFile(std::shared_ptr<DataIn> data);
         ~DataToFile()override;
         void update(size_t id);
 };

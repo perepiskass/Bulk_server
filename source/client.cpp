@@ -4,18 +4,12 @@
 
 std::pair<ba::ip::address,size_t> getArg(int argc,char** argv);
 
-client* clientPtr;
+std::unique_ptr<client> clientPtr;
 
-void signalFunction(int signal)
+void signalFunction(int)
 {
   std::cout << std::endl;
-  if (signal == 2)
-  {
-    clientPtr->disconnect();
-    delete clientPtr;
-    exit(0);
-  }
-  exit(1);
+  exit(0);
 }
 
 
@@ -24,7 +18,7 @@ int main(int argc, char *argv[])
   auto args = getArg(argc,argv);
   try
   {
-    clientPtr = new client{};
+    clientPtr.reset( new client{} );
     clientPtr->connect(args.first,args.second);
 
     signal(SIGINT,signalFunction);

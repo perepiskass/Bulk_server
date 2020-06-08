@@ -9,8 +9,8 @@ class client
 {
     public:
         client();
+        ~client();
         void connect(ba::ip::address& addres, size_t port);
-        void disconnect();
         void write(std::string&& str);
     private:
         ba::io_service io_context;

@@ -3,7 +3,7 @@
 #include <iostream>
 
 std::pair<size_t,size_t> getArg(int argc,char** argv);
-server* serverPtr;
+std::unique_ptr<server> serverPtr;
 
 void signalFunction(const boost::system::error_code & err, int signal)
 {
@@ -12,7 +12,7 @@ void signalFunction(const boost::system::error_code & err, int signal)
     std::cout << std::endl;
     if (signal == 2)
     {
-      delete serverPtr;
+      serverPtr.reset();
       logger::printLog();
       exit(0);
     }
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     boost::asio::signal_set sig(io_service, SIGINT, SIGTERM);
     sig.async_wait(signalFunction);
 
-    serverPtr = new server(io_service, args);
+    serverPtr.reset(new server(io_service, args));
     io_service.run();
   }
   

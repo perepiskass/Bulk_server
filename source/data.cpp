@@ -2,7 +2,7 @@
 
 
 //-----Data input methods----------------------------------------------------------------------
-    DataIn::DataIn(int count):works(true),bulk(nullptr),count(count),countTry(count)
+    DataIn::DataIn(const size_t count):works(true),bulk(nullptr),count(count),countTry(count)
     {
     }
 
@@ -114,9 +114,9 @@
     }
 
 //-----Data to console methods-------------------------------------------------------------------
-    DataToConsole::DataToConsole(std::weak_ptr<DataIn> data):_data(data)
+    DataToConsole::DataToConsole(std::shared_ptr<DataIn> data):_data(data)
     {
-        data.lock()->subscribe(this);
+        _data.lock()->subscribe(this);
     }
 
     DataToConsole::~DataToConsole()
@@ -153,9 +153,9 @@
     }
 
 //-----Data to file methods-----------------------------------------------------------------------
-    DataToFile::DataToFile(std::weak_ptr<DataIn> data):_data(data)
+    DataToFile::DataToFile(std::shared_ptr<DataIn> data):_data(data)
     {
-        data.lock()->subscribe(this);
+        _data.lock()->subscribe(this);
     }
 
     DataToFile::~DataToFile()
