@@ -1,5 +1,5 @@
 <map id="async::setCommands" name="async::setCommands">
 <area shape="rect" id="node2" href="$namespaceasync.html#a0335da84c092cafa3c5cb6252819571b" title="async::receive" alt="" coords="216,5,332,32"/>
-<area shape="rect" id="node3" href="$classHandler.html#a5ff7f15a05eb8efd488d3a1ba73ce75a" title="Handler::setCommand" alt="" coords="380,5,548,32"/>
+<area shape="rect" id="node3" href="$classHandler.html#a1df938225c6342b26346d48e876f40e9" title="Handler::setCommand" alt="" coords="380,5,548,32"/>
 <area shape="rect" id="node4" href="$classsession.html#ad69144e27f558b8960efae132f2e15f4" title="session::start" alt="" coords="596,5,705,32"/>
 </map>
