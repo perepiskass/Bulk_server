@@ -1,5 +1,4 @@
 <map id="async::write" name="async::write">
-<area shape="rect" id="node2" href="$classDataIn.html#a9b5101154d49b88837b4f6d98a86f894" title="DataIn::write" alt="" coords="155,31,261,57"/>
-<area shape="rect" id="node3" href="$classLogger.html#afbe890cea4f5034d431905a8578f9f22" title="Logger::getInstance" alt="" coords="317,5,468,32"/>
-<area shape="rect" id="node4" href="$classLogger.html#acffd176578c0dcae57569da73158fb99" title="Logger::set_bulkCount" alt="" coords="309,56,476,83"/>
+<area shape="rect" id="node2" href="$classMapData.html#aee84f8eccf9bccb281c6a3e227f55b92" title="MapData::getInstance" alt="" coords="155,5,319,32"/>
+<area shape="rect" id="node3" href="$classMapData.html#a611a3bbc6b6f5f23377196a084bcb064" title="MapData::getPtr" alt="" coords="173,56,300,83"/>
 </map>

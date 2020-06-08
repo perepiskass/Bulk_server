@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['writer',['Writer',['../classWriter.html',1,'']]]
+  ['server',['server',['../classserver.html',1,'']]],
+  ['session',['session',['../classsession.html',1,'']]]
 ];

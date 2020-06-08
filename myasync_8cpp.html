@@ -63,6 +63,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
 <a href="#namespaces">Пространства имен</a> &#124;
 <a href="#func-members">Функции</a>  </div>
   <div class="headertitle">
@@ -75,6 +76,7 @@ $(function() {
 <code>#include &lt;thread&gt;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;future&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Граф включаемых заголовочных файлов для myasync.cpp:</div>
 <div class="dyncontent">
@@ -87,6 +89,12 @@ $(function() {
 </map>
 </div>
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMapData.html">MapData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Класс соответсвия указателя с индексом на него  <a href="classMapData.html#details">Подробнее...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Пространства имен</h2></td></tr>
 <tr class="memitem:namespaceasync"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceasync.html">async</a></td></tr>
@@ -96,10 +104,10 @@ $(function() {
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Функции</h2></td></tr>
-<tr class="memitem:ad266274d333ab1a1840e230de371b32e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceasync.html#ad266274d333ab1a1840e230de371b32e">async::setCommands</a> (<a class="el" href="classDataIn.html">DataIn</a> *_handle, std::string &amp;&amp;str)</td></tr>
-<tr class="separator:ad266274d333ab1a1840e230de371b32e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a003d1a6899dca20ddcbff67a6abfb491"><td class="memItemLeft" align="right" valign="top">handle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceasync.html#a003d1a6899dca20ddcbff67a6abfb491">async::connect</a> (std::size_t bulk)</td></tr>
-<tr class="separator:a003d1a6899dca20ddcbff67a6abfb491"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afeaef81ba8080b05ec043f218bd369fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceasync.html#afeaef81ba8080b05ec043f218bd369fc">async::setCommands</a> (std::shared_ptr&lt; <a class="el" href="classDataIn.html">DataIn</a> &gt; _handle, std::string &amp;&amp;str)</td></tr>
+<tr class="separator:afeaef81ba8080b05ec043f218bd369fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0835dd26e56396acfb363eee33f1ec5e"><td class="memItemLeft" align="right" valign="top">handle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceasync.html#a0835dd26e56396acfb363eee33f1ec5e">async::connect</a> (const size_t bulk)</td></tr>
+<tr class="separator:a0835dd26e56396acfb363eee33f1ec5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0335da84c092cafa3c5cb6252819571b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceasync.html#a0335da84c092cafa3c5cb6252819571b">async::receive</a> (handle_t handle, const char *data, std::size_t)</td></tr>
 <tr class="separator:a0335da84c092cafa3c5cb6252819571b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17211bb811a8c362fd173ad5f58e3248"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceasync.html#a17211bb811a8c362fd173ad5f58e3248">async::write</a> (handle_t handle)</td></tr>
