@@ -29,4 +29,4 @@ deploy:
   token: $GITHUB_TOKEN
   keep_history: true
   local_dir: html
-  on: master
+  on: test
