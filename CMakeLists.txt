@@ -39,7 +39,6 @@ add_library(async ${CMAKE_SOURCE_DIR}/source/myasync.cpp ${CMAKE_SOURCE_DIR}/sou
 
 # Создаем исполняемый фаил google_test из test.cpp (для Boost test)
 # Создаем исполняемый фаил gtest из gtest.cpp
-# add_library(async ${CMAKE_SOURCE_DIR}/source/myasync.cpp ${CMAKE_SOURCE_DIR}/source/data.cpp)
 add_executable(gtest  ${CMAKE_SOURCE_DIR}/source/gtest.cpp  ${CMAKE_SOURCE_DIR}/source/arg.cpp)
 # --------------------------------------------------------------------------
 
